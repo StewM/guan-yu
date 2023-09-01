@@ -1,6 +1,6 @@
 const DISCORD = require('discord.js');
-const { buildConnector } = require('undici');
-const Check = require('./Check.js');
+const Check = require('./commands/Check.js');
+import commands from './commands';
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
 
@@ -27,6 +27,19 @@ module.exports = {
 		} else {
 			commandName = interaction.commandName;
 		}
+
+        // get all commands from modules
+        let commandStrings = [];
+
+        for (const command of commands) {
+            commandStrings = commandStrings.concat(command.commands());
+        }
+
+        
+        // switch options
+        //      help gets the help text from each command modules and sends them
+        //      if the command is in the list of all module commands, loop through 
+        //          modules to figure out which one then call execute command with the command
 
 		switch (commandName) {
 			case (CON.HELP):

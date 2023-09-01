@@ -1,9 +1,91 @@
 const DISCORD = require("discord.js");
-
-const CON = require("./constants.js");
-const UTIL = require("./utilities.js");
+const UTIL = require("../utilities.js");
 
 class Check {
+	CON = Object.freeze({
+		CHECK: {
+			CREATE: "check",
+			CANCEL: "cancel",
+			CREATE_TARGET_TYPE: "type",
+			CREATE_TARGET_TYPE_NUM_NAME: "Count",
+			CREATE_TARGET_TYPE_MENTION_NAME: "Mentions",
+			CREATE_TARGET_TYPE_CHANNEL_NAME: "Channel",
+			CREATE_MENTION_TARGET: "mentions",
+			CREATE_NUM_TARGET: "count",
+			CREATE_CHANNEL_TARGET: "channel",
+		},
+		STATUS: "status",
+		READY: "ready",
+		UNREADY: "unready",
+	});
+
+	commands() {
+		return [
+			this.CON.CHECK.CREATE,
+			this.CON.CHECK.CANCEL,
+			this.CON.STATUS,
+			this.CON.READY,
+			this.CON.UNREADY
+		]
+	}
+
+	commandDefinitions() {
+		return [
+			{
+				name: this.CON.CHECK.CREATE,
+				description: "Create a ready check",
+				options: [
+					{
+						name: this.CON.CHECK.CREATE_TARGET_TYPE,
+						description: "The type of ready check to do",
+						type: 3,
+						required: true,
+						choices: [
+							{
+								name: this.CON.CHECK.CREATE_TARGET_TYPE_CHANNEL_NAME,
+								value: this.CON.CHECK.CREATE_CHANNEL_TARGET
+							},
+							{
+								name: this.CON.CHECK.CREATE_TARGET_TYPE_NUM_NAME,
+								value: this.CON.CHECK.CREATE_NUM_TARGET
+							},
+							{
+								name: this.CON.CHECK.CREATE_TARGET_TYPE_MENTION_NAME,
+								value: this.CON.CHECK.CREATE_MENTION_TARGET
+							}
+						]
+					},
+					{
+						name: this.CON.CHECK.CREATE_NUM_TARGET,
+						description: "The number of users to ready",
+						type: 4
+					},
+					{
+						name: this.CON.CHECK.CREATE_MENTION_TARGET,
+						description: "The users/roles to ready",
+						type: 3
+					}
+				]
+			},
+			{
+				name: this.CON.CHECK.CANCEL,
+				description: "Cancel a ready check"
+			},
+			{
+				name: this.CON.READY,
+				description: 'Respond "Ready" to a ready check'
+			},
+			{
+				name: this.CON.UNREADY,
+				description: 'Respond "Not Ready" to a ready check'
+			},
+			{
+				name: this.CON.STATUS,
+				description: "Check the status of the current ready check"
+			}
+		]
+	}
+
 	/**
 	 * @param {DISCORD.User} _author The user who initiated the check
 	 */
@@ -204,13 +286,13 @@ class Check {
 							type: 2,
 							label: "Ready",
 							style: 3,
-							custom_id: CON.READY
+							custom_id: this.CON.READY
 						},
 						{
 							type: 2,
 							label: "Not Ready",
 							style: 4,
-							custom_id: CON.UNREADY
+							custom_id: this.CON.UNREADY
 						}
 					]
 				}
