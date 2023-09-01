@@ -1,8 +1,18 @@
-const DISCORD = require("discord.js");
 const UTIL = require("../utilities.js");
+import { User, Message, CommandInteraction, ButtonInteraction, ChatInputApplicationCommandData } from "discord.js";
+import { Command } from "./command";
 
-class Check {
-	CON = Object.freeze({
+class Check extends Command {
+	author: User;
+	count: number;
+	targets: User[];
+	isTargeted: boolean;
+	readiedUsers: User[];
+	readiedCount: number;
+	statusMessage?: Message;
+	
+
+	static CON = Object.freeze({
 		CHECK: {
 			CREATE: "check",
 			CANCEL: "cancel",
@@ -19,7 +29,7 @@ class Check {
 		UNREADY: "unready",
 	});
 
-	commands() {
+	static commands(): string[] {
 		return [
 			this.CON.CHECK.CREATE,
 			this.CON.CHECK.CANCEL,
@@ -29,7 +39,7 @@ class Check {
 		]
 	}
 
-	commandDefinitions() {
+	static commandDefinitions() {
 		return [
 			{
 				name: this.CON.CHECK.CREATE,
@@ -86,14 +96,19 @@ class Check {
 		]
 	}
 
-	/**
-	 * @param {DISCORD.User} _author The user who initiated the check
-	 */
-	constructor(_author) {
+	static help() {
+		return `To create a check, run \`/${this.CON.CHECK.CREATE}\`\n` +
+		`To respond to a check, run \`/${this.CON.READY}\` or \`/${this.CON.UNREADY}\`\n` +
+		`To cancel a check, run \`/${this.CON.CHECK.CANCEL}\`\n` +
+		`To see who still needs to ready, run \`/${this.CON.STATUS}\`\n`;
+	}
+
+	constructor(_author: User) {
+		super();
 		this.author = _author;
-		this.statusMessage = null;
 		this.count = 0;
 		this.targets = [];
+		this.isTargeted = false;
 		this.readiedUsers = [];
 		this.readiedCount = 0;
 	}
@@ -101,8 +116,8 @@ class Check {
 	/**
 	 * @param {number|DISCORD.User} _target how many people/which people to have ready
 	 */
-	activate(_target) {
-		if (!isNaN(_target)) {
+	activate(_target: number | User[]) {
+		if (typeof _target === "number") {
 			this.count = _target;
 			this.isTargeted = false;
 		}
@@ -128,7 +143,7 @@ class Check {
 	 * @returns {DISCORD.User} The user who created this ready check
 	 */
 	getAuthor() {
-		return this.interaction.user;
+		return this.author;
 	}
 
 	/**
@@ -165,7 +180,7 @@ class Check {
 	 * @param {DISCORD.User} user User to check
 	 * @returns {boolean} True if user has already readied in this check, else false
 	 */
-	isUserReadied(user) {
+	isUserReadied(user: User) {
 		return this.readiedUsers.indexOf(user) > -1;
 	}
 
@@ -174,7 +189,7 @@ class Check {
 	 * @param {DISCORD.User} user User to check
 	 * @returns {boolean} True if user has been asked to ready in this check, else false
 	 */
-	isUserReadyRequired(user) {
+	isUserReadyRequired(user: User) {
 		return this.targets.indexOf(user) > -1;
 	}
 
@@ -186,9 +201,12 @@ class Check {
 
 	/**
 	 * Mark the user ready if appropriate
-	 * @param {DISCORD.User} user User to mark ready
 	 */
-	async readyUser(user, interaction) {
+	async readyUser(user: User, interaction: CommandInteraction | ButtonInteraction) {
+		// check for the status message existing, TODO: add better error handling for this
+		if (!this.statusMessage){
+			return;
+		}
 		// If this user has already readied for this check
 		if (this.isUserReadied(user)) {
 			await UTIL.safeRespond(interaction, {
@@ -235,9 +253,12 @@ class Check {
 
 	/**
 	 * Mark the user ready if appropriate
-	 * @param {DISCORD.User} user User to mark ready
 	 */
-	async unReadyUser(user, interaction) {
+	async unReadyUser(user: User, interaction: CommandInteraction | ButtonInteraction) {
+		// check for the status message existing, TODO: add better error handling for this
+		if (!this.statusMessage){
+			return;
+		}
 		if (!this.isUserReadied(user)) {
 			await UTIL.safeRespond(interaction, {
 				content: "You haven't readied yet, no need to unready!",
@@ -286,13 +307,13 @@ class Check {
 							type: 2,
 							label: "Ready",
 							style: 3,
-							custom_id: this.CON.READY
+							custom_id: Check.CON.READY
 						},
 						{
 							type: 2,
 							label: "Not Ready",
 							style: 4,
-							custom_id: this.CON.UNREADY
+							custom_id: Check.CON.UNREADY
 						}
 					]
 				}
@@ -303,4 +324,4 @@ class Check {
 	}
 }
 
-module.exports = Check;
+export default Check;

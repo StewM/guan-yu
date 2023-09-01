@@ -1,6 +1,7 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const CON = require("./constants.js");
+const CON = require("./constants");
+import commandModules from './commands';
 require("dotenv").config();
 
 const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
@@ -66,6 +67,16 @@ const commands = [
 
 module.exports = {
     deployCommands: async function () {
+        let commands = [
+            {
+                name: CON.HELP,
+                description: "Get help using ready-bot"
+            }
+        ];
+
+        for (const command of commandModules) {
+            commands = commands.concat(command.commandDefinitions())
+        }
         try {
             console.log('Registering slash-commands...');
             await rest.put(

@@ -1,5 +1,4 @@
-const DISCORD = require('discord.js');
-const Check = require('./commands/Check.js');
+import Check from './commands/Check';
 import commands from './commands';
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
@@ -29,7 +28,7 @@ module.exports = {
 		}
 
         // get all commands from modules
-        let commandStrings = [];
+        let commandStrings: string[] = [];
 
         for (const command of commands) {
             commandStrings = commandStrings.concat(command.commands());
