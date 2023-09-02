@@ -17,7 +17,7 @@ CLIENT.on("ready", () => {
 
 	DEPLOY.deployCommands();
 
-	CLIENT.user.setActivity(`/${CON.CHECK.CREATE}`);
+	CLIENT.user.setActivity(`Guan Yu Flow`);
 });
 
 CLIENT.on("interactionCreate", interaction => {

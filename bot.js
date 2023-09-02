@@ -1,6 +1,7 @@
 const DISCORD = require('discord.js');
 const { buildConnector } = require('undici');
 const Check = require('./Check.js');
+const Dracula =  require('./Dracula.js');
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
 
@@ -167,6 +168,9 @@ module.exports = {
 					console.error("Failed to create check:", interaction);
 					console.error("target:", activeParam);
 				}
+				break;
+			case (CON.DRACULA):
+				await Dracula.flow(interaction);
 				break;
 			default:
 				await UTIL.safeRespond(interaction, {

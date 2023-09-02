@@ -15,5 +15,6 @@ module.exports = Object.freeze({
     READY_SHORT: "r",
     UNREADY: "unready",
     HELP: "help",
-    CONTRIBUTE: "docs"
+    CONTRIBUTE: "docs",
+    DRACULA: "dracula"
 });
