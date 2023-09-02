@@ -1,6 +1,6 @@
 import { CommandInteraction, ButtonInteraction, MessagePayload, InteractionReplyOptions, GuildMember } from "discord.js";
 
-module.exports = {
+export default {
     errorMsg: function (reason = "") {
         return `${reason.length ? reason + " " : ""}Type \`/help\` for a list of commands.`;
     },

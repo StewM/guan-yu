@@ -1,6 +1,6 @@
 import { Command } from "./command";
-import Check from "./Check";
+import CheckCommand from "./Check";
 
-const commands = [Check];
+const commands = [CheckCommand];
 
 export default commands;

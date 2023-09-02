@@ -1,6 +1,9 @@
 import { Client, GatewayIntentBits } from "discord.js";
-const deploy = require("./deploy-commands")
+import commandModules from './commands';
+import sqlite3 from 'sqlite3';
 require("dotenv").config();
+
+let db = new sqlite3.Database(':memory:');
 
 // const bot = require("./bot.js");
 
@@ -10,14 +13,28 @@ const client = new Client({
 
 const checks = {};
 
-client.on("ready", () => {
+client.on("ready", async () => {
 	if (!client.user || !client.application) {
 		return;
 	}
 	// Give some diagnostic info when we log in
 	console.log(`Logged in as ${client.user.tag}!`);
 
-	//deploy.deployCommands();
+	let commands = [
+		{
+			name: "help",
+			description: "Get help using ready-bot"
+		}
+	];
+
+	for (const command of commandModules) {
+		// get command definitions
+		commands = commands.concat(command.commandDefinitions());
+		// init db tables
+		command.setupDB(db);
+	}
+
+	await client.application.commands.set(commands);
 
 	client.user.setActivity('Guan Yu Flow');
 });
@@ -29,5 +46,3 @@ client.on("ready", () => {
 
 // Hook up to discord
 client.login(process.env.BOT_TOKEN);
-
-console.log(client);
