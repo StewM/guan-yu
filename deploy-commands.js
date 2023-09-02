@@ -61,6 +61,10 @@ const commands = [
     {
         name: CON.HELP,
         description: "Get help using ready-bot"
+    },
+    {
+        name: CON.DRACULA,
+        description: "Get some Dracula Flow"
     }
 ];
 
