@@ -6,7 +6,7 @@ require("dotenv").config();
 const BOT = require("./bot.js");
 
 const CLIENT = new Client({
-	intents: [3072, GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]
+	intents: [3072, GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages]
 });
 
 const checks = {};
@@ -23,6 +23,11 @@ CLIENT.on("ready", () => {
 CLIENT.on("interactionCreate", interaction => {
 	if (!interaction.isCommand() && !interaction.isButton()) return;
 	BOT.handleMessage(checks, interaction);
+});
+
+CLIENT.on("messageCreate", message => {
+	// fix twitter embeds
+	BOT.fixEmbed(message);
 });
 
 // Hook up to discord
