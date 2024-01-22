@@ -5,7 +5,7 @@ const Dracula =  require('./Dracula.js');
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
 
-const pattern = /<?https?:\/\/(?:www\.)?(?:twitter|x)\.com\/([\w_]+\/status\/\d+)(?:\?\S+)?>?/;
+const pattern = /(\|\|)?https?:\/\/(?:www\.)?(?:twitter|x)\.com\/([\w_]+\/status\/\d+)(?:\?\S+)?(\|\|)?/;
 
 module.exports = {
 	/**
@@ -304,9 +304,20 @@ module.exports = {
 		await message.fetch();
 		let matches = message.content.match(pattern);
 		if (matches) {
-			let reply = "https://fxtwitter.com/" + matches[1];
+			let reply = "";
+			if (matches[1] && matches[3]) {
+				reply = "||https://fxtwitter.com/" + matches[2] + "||";
+			} else {
+				reply = "https://fxtwitter.com/" + matches[2];
+			}
 			let channel = message.channel;
 			await channel.send(reply);
+			try{
+				await message.suppressEmbeds(true);
+			}
+			catch(err) {
+				console.log("Remove embed failed");
+			}
 		}
 	}
 }
