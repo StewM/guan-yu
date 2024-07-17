@@ -5,7 +5,7 @@ const Dracula =  require('./Dracula.js');
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
 
-const pattern = /(\|\|)?https?:\/\/(?:www\.)?(?:twitter|x)\.com\/([\w_]+\/status\/\d+)(?:\?\S+)?(\|\|)?/;
+const pattern = /(\|\|(?:\s*)?)?https?:\/\/(?:www\.)?(?:twitter|x)\.com\/([\w_]+\/status\/\d+)(?:\?\S+)?((?:\s*)?\|\|)?/;
 
 module.exports = {
 	/**
