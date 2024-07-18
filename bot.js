@@ -4,6 +4,7 @@ const Check = require('./Check.js');
 const Dracula =  require('./Dracula.js');
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
+import { setTimeout } from "timers/promises";
 
 const pattern = /(\|\|(?:\s*)?)?https?:\/\/(?:www\.)?(?:twitter|x)\.com\/([\w_]+\/status\/\d+)(?:\?\S+)?((?:\s*)?\|\|)?/;
 
@@ -313,6 +314,7 @@ module.exports = {
 			let channel = message.channel;
 			await channel.send(reply);
 			try{
+				await setTimeout(500);
 				await message.suppressEmbeds(true);
 			}
 			catch(err) {
