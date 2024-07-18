@@ -4,7 +4,7 @@ const Check = require('./Check.js');
 const Dracula =  require('./Dracula.js');
 const CON = require('./constants.js');
 const UTIL = require('./utilities.js');
-import { setTimeout } from "timers/promises";
+const { setTimeout } = require('timers/promises');
 
 const pattern = /(\|\|(?:\s*)?)?https?:\/\/(?:www\.)?(?:twitter|x)\.com\/([\w_]+\/status\/\d+)(?:\?\S+)?((?:\s*)?\|\|)?/;
 
