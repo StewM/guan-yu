@@ -307,9 +307,9 @@ module.exports = {
 		if (matches) {
 			let reply = "";
 			if (matches[1] && matches[3]) {
-				reply = "||https://fxtwitter.com/" + matches[2] + "||";
+				reply = "||https://fixvx.com/" + matches[2] + "||";
 			} else {
-				reply = "https://fxtwitter.com/" + matches[2];
+				reply = "https://fixvx.com/" + matches[2];
 			}
 			let channel = message.channel;
 			await channel.send(reply);
